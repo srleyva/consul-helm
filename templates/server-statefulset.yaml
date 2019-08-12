@@ -123,8 +123,6 @@ spec:
                 {{- end }}
                 -server
           volumeMounts:
-            - name: data-{{ .Release.Namespace }}
-              mountPath: /consul/data
             - name: config
               mountPath: /consul/config
             {{- range .Values.server.extraVolumes }}
@@ -177,16 +175,4 @@ spec:
       nodeSelector:
         {{ tpl .Values.server.nodeSelector . | indent 8 | trim }}
       {{- end }}    
-  volumeClaimTemplates:
-    - metadata:
-        name: data-{{ .Release.Namespace }}
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: {{ .Values.server.storage }}
-        {{- if .Values.server.storageClass }}
-        storageClassName: {{ .Values.server.storageClass }}
-        {{- end }}
 {{- end }}
